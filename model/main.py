@@ -16,18 +16,18 @@ import sys
 from IPython.display import Image
 from keras.optimizers import Adam
 
-# folder = sys.argv[1]
-# num_classes = len(os.listdir(folder))
+folder = sys.argv[1]
+num_classes = len(os.listdir(folder))
 
 
-base_model=MobileNet(weights='selfword',include_top=False) #imports the mobilenet model and discards the last 1000 neuron layer.
+base_model=MobileNet(weights='imagenet',include_top=False) #imports the mobilenet model and discards the last 1000 neuron layer.
 
 x=base_model.output
 x=GlobalAveragePooling2D()(x)
 x=Dense(1024,activation='relu')(x) #we add dense layers so that the model can learn more complex functions and classify for better results.
 x=Dense(1024,activation='relu')(x) #dense layer 2
 x=Dense(512,activation='relu')(x) #dense layer 3
-preds=Dense(6,activation='softmax')(x) #final layer with softmax activation
+preds=Dense(num_classes,activation='softmax')(x) #final layer with softmax activation
 model=Model(inputs=base_model.input,outputs=preds)
 
 
@@ -57,6 +57,6 @@ model.compile(optimizer='Adam',loss='categorical_crossentropy',metrics=['accurac
 step_size_train=train_generator.n//train_generator.batch_size
 model.fit_generator(generator=train_generator,
                    steps_per_epoch=step_size_train,
-                   epochs=5)
+                   epochs=10)
 
 model.save('{}.h5'.format(sys.arg[2]))
