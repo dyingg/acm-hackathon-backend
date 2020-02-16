@@ -38,7 +38,7 @@ app.post('/resource', (req, res) => {
 			fs.mkdirSync(`home/anubhav26th/acm-hackathon-backend/model/${req.body.user}/${req.body.class}`);	
 			console.log("NEW gesture!");
 		}
-		fs.writeFile(`home/anubhav26th/acm-hackathon-backend/model/${req.body.user}/${req.body.class}/${Date.now()}`, Buffer.from(req.body, 'base64'), (err) => {
+		fs.writeFile(`home/anubhav26th/acm-hackathon-backend/model/${req.body.user}/${req.body.class}/${Date.now()}.jpg`, Buffer.from(req.body, 'base64'), (err) => {
 			if (err) {
 				console.log(err);
 			}
