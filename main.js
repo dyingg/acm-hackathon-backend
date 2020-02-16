@@ -7,6 +7,9 @@ var spawn = require("child_process").spawn;
 var children  = [];
 
 
+
+let databse = {};
+
 process.on('exit', function() {
 	console.log('killing', children.length, 'child processes');
 	children.forEach(function(child) {
@@ -27,7 +30,15 @@ app.get('/', (req, res) => {
 
 app.post('/resource', (req, res) => {
 	if (req.body && req.body.image && req.body.user && req.body.class) {
-		fs.writeFile(`/data/${req.body.user}`, Buffer.from(req.body, 'base64'), (err) => {
+		if (!fs.existsSync(`home/anubhav26th/acm-hackathon-backend/model/${req.body.user}/`)) {
+			fs.mkdirSync(`home/anubhav26th/acm-hackathon-backend/model/${req.body.user}/`);
+			console.log("NEW USER!");
+		}
+		if (!fs.existsSync(`home/anubhav26th/acm-hackathon-backend/model/${req.body.user}/${req.body.class}`)) {
+			fs.mkdirSync(`home/anubhav26th/acm-hackathon-backend/model/${req.body.user}/${req.body.class}`);	
+			console.log("NEW gesture!");
+		}
+		fs.writeFile(`home/anubhav26th/acm-hackathon-backend/model/${req.body.user}/${req.body.class}/${Date.now()}`, Buffer.from(req.body, 'base64'), (err) => {
 			if (err) {
 				console.log(err);
 			}
@@ -41,6 +52,21 @@ app.post('/resource', (req, res) => {
 	}
 });
 
+app.post('/done', (req, res) => { 
+	if (req.body && req.body.id) {
+		if (databse[ID]) {
+			res.json({
+				status: "done"
+			})
+		}
+		else {
+			res.json({
+				status: "not done"
+			})
+		}
+	}
+});
+
 
 app.post('/compile', (req, res) => {
 
@@ -48,6 +74,7 @@ app.post('/compile', (req, res) => {
 
 		const ID = Date.now();
 		console.log("Starting model trainer!");
+		databse[ID] = false;
 
 		var process = spawn('python', [`./model/main.py`,
 			`/home/anubhav26th/acm-hackathon-backend/model/${req.body.user}`,
@@ -56,6 +83,7 @@ app.post('/compile', (req, res) => {
 		
 		process.on('exit', () => {
 			console.log('MODEL TRAINING DONE');
+			databse[ID] = true;
 		});
 
 		
