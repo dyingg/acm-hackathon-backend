@@ -59,4 +59,4 @@ model.fit_generator(generator=train_generator,
                    steps_per_epoch=step_size_train,
                    epochs=10)
 
-model.save('{}.h5'.format(sys.arg[2]))
+model.save('{}.h5'.format(sys.argv[2]))
