@@ -54,23 +54,6 @@ app.post('/compile', (req, res) => {
 			ID]); 
 		
 		
-		process.on('error', (data) => {
-			console.log(data);
-		})
-		process.on('message', function (data) {
-			console.log(data);
-		})
-		
-		
-		process.stdout.on('data', function(data) {
-			console.log('data',new Buffer(data,'utf-8').toString());
-		   // get fired but not for every write line
-		});
-		process.stdout.on('end', function(data) {
-				console.log('end',new Buffer(data,'utf-8').toString());
-				// not fired since the command does not close the stream until a `SIGINT`
-		});
-
 		process.on('exit', () => {
 			console.log('MODEL TRAINING DONE');
 		});
