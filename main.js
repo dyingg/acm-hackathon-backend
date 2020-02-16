@@ -43,7 +43,11 @@ app.post('/resource', (req, res) => {
 				console.log(err);
 			}
 			else {
+			
 				console.log(`Recieved and saved image of user ${req.body.user}`);
+				return res.json({
+					status: "ok"
+				})
 			}
 		})
 	}
