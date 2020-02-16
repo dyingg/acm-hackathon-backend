@@ -47,13 +47,16 @@ app.post('/compile', (req, res) => {
 	if (req.body && req.body.user) {
 
 		const ID = Date.now();
-
-		var process = spawn('python',['-u', "./mobilenet/main.py", 
-		req.body.username, 
+		console.log("Starting model trainer!");
+		var process = spawn('python', ['-u', "./mobilenet/main.py",
+			req.body.user,
 			ID]); 
 		
 		
 		process.on('error', (data) => {
+			console.log(data);
+		})
+		process.on('message', function (data) {
 			console.log(data);
 		})
 		process.stdout.on('data', function (data) {
