@@ -48,7 +48,7 @@ app.post('/compile', (req, res) => {
 
 		const ID = Date.now();
 		console.log("Starting model trainer!");
-		var process = spawn('python', ['-u', "./mobilenet/main.py",
+		var process = spawn('python', ["./mobilenet/main.py",
 			req.body.user,
 			ID]); 
 		
